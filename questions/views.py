@@ -1,23 +1,23 @@
-from django.http import JsonResponse
-from django.shortcuts import render
-from django.contrib.auth.models import User
-# Create your views here.
 from django.views.decorators.csrf import csrf_exempt
+
+from .serializers import QuestionSerializer
+from .models import Question
+from django.http import JsonResponse, HttpResponse
 from rest_framework.parsers import JSONParser
 
-from .serializers import UserSerializer
-
 @csrf_exempt
-def user_create(request):
+def question_list(request):
+
     if request.method == "GET":
-        users = User.objects.all()
-        serializer = UserSerializer(
-           users, many=True
+        questions = Question.objects.all()
+        serializer = QuestionSerializer(
+           questions, many=True
         )
         return JsonResponse(serializer.data, safe=False)
-    if request.method == "POST":
+
+    elif request.method == "POST":
         data = JSONParser().parse(request)
-        serializer = UserSerializer(
+        serializer = QuestionSerializer(
             data=data
         )
         if serializer.is_valid():
