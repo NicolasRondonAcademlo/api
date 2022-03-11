@@ -3,5 +3,5 @@ from .views import user_create
 
 urlpatterns = [
     path("api/", include("questions.urls")),
-    path("api/users", user_create)
+    path("api/users/", user_create)
 ]
