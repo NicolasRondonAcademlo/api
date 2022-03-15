@@ -23,5 +23,9 @@ class Answer(models.Model):
         Question, on_delete=models.CASCADE
     )
 
+
+
     def __str__(self):
         return str(self.question) + "|" + str(self.text)
+
+
