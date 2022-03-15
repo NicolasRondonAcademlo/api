@@ -4,18 +4,21 @@ from django.contrib.auth.models import User
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.parsers import JSONParser
-
+from rest_framework.response import  Response
+from  rest_framework import status
 from .serializers import CreateUserSerializer, UserSerializer
+from rest_framework.decorators import api_view
 
 
-@csrf_exempt
+@api_view(["GET", "POST"])
 def user_create(request):
     if request.method == "GET":
         users = User.objects.all()
-        serializer = CreateUserSerializer(
+        serializer = UserSerializer(
            users, many=True
         )
-        return JsonResponse(serializer.data, safe=False)
+        # return JsonResponse(serializer.data, safe=False)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
     if request.method == "POST":
         data = JSONParser().parse(request)
         serializer = CreateUserSerializer(
@@ -25,5 +28,5 @@ def user_create(request):
             user = serializer.save()
             user = User.objects.get(pk=user.id)
             serializer = UserSerializer(user)
-            return JsonResponse(serializer.data, status=201 )
-        return JsonResponse(serializer.errors, status=400)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

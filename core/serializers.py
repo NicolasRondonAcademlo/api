@@ -10,11 +10,14 @@ from rest_framework import serializers
 
 class CreateUserSerializer(serializers.ModelSerializer):
     # username = serializers.CharField(max_length=25, validators=[username_validator])
+    # second_password = serializers.CharField(max_length=12)
     class Meta:
         model = User
         fields = ("username", "password")
 
     def create(self, validated_data):
+        # if  validated_data["second_password"]   == validated_data["passowrd"]:
+        #     pass
         validated_data["password"] = make_password(validated_data["password"])
         return User.objects.create(**validated_data)
 
