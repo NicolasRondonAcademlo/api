@@ -20,9 +20,8 @@ def user_create(request):
         # return JsonResponse(serializer.data, safe=False)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
     if request.method == "POST":
-        data = JSONParser().parse(request)
         serializer = CreateUserSerializer(
-            data=data
+            data=request.data
         )
         if serializer.is_valid():
             user = serializer.save()
